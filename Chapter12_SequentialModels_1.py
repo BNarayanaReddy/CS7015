@@ -75,11 +75,12 @@ def fit_rnn_model(vocab_size, hidden_dim=256, input_emb_dim = 768, epochs = 10, 
 
     # randomly mask the input embeddings
     output_idx = np.random.randint(0, vocab_size)
-    input_embeddings[:, output_idx] = torch.zeros(1, input_emb_dim)
+    input_embed = input_embeddings.clone()
+    input_embed[:, output_idx] = torch.zeros(1, input_emb_dim)
 
     hidden_state = torch.zeros(1, hidden_dim)
 
-    for tensor in input_embeddings[0]:
+    for tensor in input_embed[0]:
       # teacher forced training
       output, hidden_state = rnn_model(tensor.unsqueeze(dim=0), hidden_state.detach())
 
